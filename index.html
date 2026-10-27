@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creator Deal Desk</title>
+<style>
+:root{
+  --bg:#f6f5f2;--card:#ffffff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e4e2dc;
+  --accent:#0b6e4f;--accent-soft:#e3f2ec;--warn:#b54708;--warn-soft:#fdf0e3;--bad:#b42318;--bad-soft:#fdeceb;
+  --radius:12px;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#141416;--card:#1d1d20;--ink:#f2f2f3;--muted:#a0a0a8;--line:#2e2e33;
+  --accent:#3fbf8f;--accent-soft:#183329;--warn:#f0a35e;--warn-soft:#3a2716;--bad:#f2786d;--bad-soft:#3a1c1a;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:28px 16px 8px;max-width:1180px;margin:auto}
+header h1{margin:0;font-size:26px;letter-spacing:-.02em}
+header p{margin:4px 0 0;color:var(--muted)}
+.demo{display:inline-block;margin-top:10px;font-size:12px;padding:3px 10px;border-radius:99px;background:var(--warn-soft);color:var(--warn)}
+nav{max-width:1180px;margin:16px auto 0;padding:0 16px;display:flex;gap:6px;flex-wrap:wrap}
+nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;cursor:pointer;font:inherit}
+nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{max-width:1180px;margin:auto;padding:16px}
+section{display:none}section.on{display:block}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.card h2{margin:0 0 4px;font-size:17px}.card h3{margin:14px 0 6px;font-size:14px}
+.hint{color:var(--muted);font-size:13px;margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{font-family:var(--mono);font-size:13px;min-height:70px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1}
+button.act{margin-top:12px;background:var(--accent);color:#fff;border:0;padding:9px 16px;border-radius:8px;cursor:pointer;font:inherit}
+button.ghost{margin-top:12px;background:transparent;color:var(--ink);border:1px solid var(--line);padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit}
+.kpi{font-size:30px;font-weight:650;letter-spacing:-.02em}
+.kpi small{font-size:14px;color:var(--muted);font-weight:400}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.ok{background:var(--accent-soft);color:var(--accent)}.mid{background:var(--warn-soft);color:var(--warn)}.no{background:var(--bad-soft);color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+details.work{margin-top:10px;font-size:13px;color:var(--muted)}
+details.work summary{cursor:pointer;color:var(--accent)}
+details.work pre{white-space:pre-wrap;font-family:var(--mono);font-size:12px;background:var(--bg);padding:10px;border-radius:8px;margin:6px 0 0}
+.chips span{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 7px;margin:2px;border-radius:6px;background:var(--bg)}
+.chips span.x{text-decoration:line-through;color:var(--bad)}
+.scroll{overflow-x:auto}
+footer{max-width:1180px;margin:20px auto 40px;padding:0 16px;color:var(--muted);font-size:13px}
+@media (max-width:600px){.row{flex-direction:column;gap:0}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Creator Deal Desk</h1>
+  <p>Price creator partnerships on CPM, test rate cards, model ROI and plan the content calendar in one place.</p>
+  <span class="demo">Demo build · all creators, rates and figures are sample data</span>
+</header>
+
+<nav id="tabs">
+  <button data-t="views" class="on">1 · Views</button>
+  <button data-t="package">2 · Package & CPM</button>
+  <button data-t="reverse">3 · Rate card check</button>
+  <button data-t="roi">4 · ROI scenarios</button>
+  <button data-t="calendar">5 · Calendar</button>
+  <button data-t="log">6 · Lead log</button>
+  <button data-t="settings">Settings</button>
+</nav>
+
+<main>
+<!-- VIEWS -->
+<section id="views" class="on">
+  <div class="card" style="margin-bottom:16px">
+    <h2>Creator</h2>
+    <div class="row">
+      <div><label>Creator name</label><input id="creator" value="Sample Travel Duo"></div>
+      <div><label>Followers / subscribers (largest channel)</label><input id="followers" type="number" value="240000"></div>
+    </div>
+    <p class="hint" style="margin-top:10px">Paste recent views per channel (newest first, one per line or comma separated, up to 30). Viral spikes are excluded automatically.</p>
+  </div>
+  <div class="grid" id="viewCards"></div>
+</section>
+
+<!-- PACKAGE -->
+<section id="package">
+  <div class="grid">
+    <div class="card">
+      <h2>Build the package</h2>
+      <p class="hint">Quantities per content type. Average views come from tab 1.</p>
+      <div id="pkgItems"></div>
+      <div class="row">
+        <div><label>Budget</label><input id="budget" type="number" value="12000"></div>
+        <div><label>Currency</label><select id="budgetCur"></select></div>
+      </div>
+      <label>Collaboration length (months)</label>
+      <select id="months"></select>
+    </div>
+    <div class="card">
+      <h2>Result</h2>
+      <div class="kpi" id="cpmOut">-</div>
+      <div id="cpmBadge" style="margin:6px 0 10px"></div>
+      <table>
+        <tr><td>Total projected views</td><td class="n" id="totViews">-</td></tr>
+        <tr><td>Budget in EUR</td><td class="n" id="budEur">-</td></tr>
+        <tr><td>Max budget at ceiling CPM</td><td class="n" id="maxBud">-</td></tr>
+        <tr><td>Views needed to hit ceiling</td><td class="n" id="needViews">-</td></tr>
+      </table>
+      <details class="work"><summary>Show working</summary><pre id="cpmWork"></pre></details>
+    </div>
+    <div class="card">
+      <h2>Solve for the missing number</h2>
+      <p class="hint">Fill any two, leave one empty.</p>
+      <label>Total views</label><input id="sV" type="number">
+      <label>CPM (EUR)</label><input id="sC" type="number" step="0.01">
+      <label>Budget (EUR)</label><input id="sB" type="number">
+      <button class="act" id="solveBtn">Solve</button>
+      <p id="solveOut" style="margin-top:10px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- REVERSE -->
+<section id="reverse">
+  <div class="grid">
+    <div class="card">
+      <h2>Rate card check</h2>
+      <p class="hint">Paste a creator's rate card, one line per item: <code>Content type ; price</code>. Content type must match a channel keyword (YouTube long, YouTube Short, TikTok, Reel, Story, Blog).</p>
+      <textarea id="rateCard" style="min-height:140px">YouTube Dedicated Long Form ; 4200
+YouTube Integration ; 2400
+Instagram Reel Integration ; 1500
+TikTok Dedicated ; 1800
+Instagram Story with link ; 600</textarea>
+      <div class="row">
+        <div><label>Currency</label><select id="rcCur"></select></div>
+        <div><label>Target CPM (EUR)</label><input id="rcTarget" type="number" value="15"></div>
+      </div>
+      <button class="act" id="rcBtn">Analyse</button>
+    </div>
+    <div class="card">
+      <h2>Verdict per item</h2>
+      <div class="scroll"><table id="rcTable"></table></div>
+      <details class="work"><summary>Show working</summary><pre id="rcWork"></pre></details>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section id="roi">
+  <div class="grid">
+    <div class="card">
+      <h2>Funnel assumptions</h2>
+      <p class="hint">Editable. Defaults are illustrative, not real campaign data.</p>
+      <div class="row">
+        <div><label>Sale rate from leads</label><input id="fSale" type="number" step="0.1" value="10.5"></div>
+        <div><label>AOV (EUR)</label><input id="fAov" type="number" value="36"></div>
+      </div>
+      <div class="row">
+        <div><label>Commission %</label><input id="fComm" type="number" step="0.5" value="10"></div>
+        <div><label>Website drop-off %</label><input id="fDrop" type="number" value="20"></div>
+      </div>
+      <label>Content style</label>
+      <select id="fStyle"><option value="ded">Mostly dedicated</option><option value="int">Mostly integrations</option></select>
+      <h3>Tier</h3>
+      <p class="hint" id="tierOut"></p>
+    </div>
+    <div class="card" style="grid-column:span 2;min-width:0">
+      <h2>Scenarios over time</h2>
+      <p class="hint">Long-tail multipliers model views that keep arriving after the publish date.</p>
+      <div class="scroll"><table id="roiTable"></table></div>
+      <details class="work"><summary>Show working</summary><pre id="roiWork"></pre></details>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section id="calendar">
+  <div class="card">
+    <h2>Content calendar</h2>
+    <p class="hint">Spreads the package across the collaboration, weighted by seasonality, minimum one item per month. Export and share with the creator.</p>
+    <div class="row">
+      <div><label>Start month</label><input id="calStart" type="month"></div>
+      <div><label>Seasonality profile</label>
+        <select id="calSeason">
+          <option value="au">Southern hemisphere travel</option>
+          <option value="eu">Northern hemisphere travel</option>
+          <option value="flat">Flat</option>
+        </select></div>
+    </div>
+    <div class="scroll" style="margin-top:14px"><table id="calTable"></table></div>
+    <button class="ghost" id="calCsv">Export CSV</button>
+    <button class="ghost" id="calIcs">Export .ics (Google Calendar)</button>
+  </div>
+</section>
+
+<!-- LOG -->
+<section id="log">
+  <div class="card">
+    <h2>Lead log</h2>
+    <p class="hint">Every creator you test, with the outcome. Stored in this browser only.</p>
+    <div class="row">
+      <div><label>Outcome</label><select id="logOutcome"><option>Accepted</option><option>Countered</option><option>Declined</option><option>Parked</option></select></div>
+      <div style="flex:2"><label>Note</label><input id="logNote" placeholder="e.g. strong AU audience, countered at 15 EUR CPM"></div>
+    </div>
+    <button class="act" id="logAdd">Log current creator</button>
+    <button class="ghost" id="logCsv">Export CSV</button>
+    <div class="scroll" style="margin-top:14px"><table id="logTable"></table></div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings">
+  <div class="grid">
+    <div class="card">
+      <h2>Pricing rules</h2>
+      <label>Ceiling CPM (EUR)</label><input id="ceiling" type="number" value="22">
+      <label>Good-deal CPM (EUR), green below this</label><input id="goodCpm" type="number" value="15">
+      <label>Spike filter: exclude values above N × median</label><input id="spikeX" type="number" step="0.5" value="3">
+      <label>1M+ views count only if at least N of the last 6 are 1M+</label><input id="millionRule" type="number" value="4">
+    </div>
+    <div class="card">
+      <h2>FX to EUR (demo rates)</h2>
+      <p class="hint">Edit to current rates before use.</p>
+      <div id="fxBox"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>Built by Fabrizio De Mel · Single-file tool, no backend, no tracking.</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const CUR=['EUR','AUD','USD','GBP'];
+const FX={EUR:1,AUD:0.61,USD:0.92,GBP:1.17};
+const CHANNELS=[
+  {k:'yt',name:'YouTube long form',sample:'184000, 152000, 171000, 2100000, 139000, 166000, 158000, 147000'},
+  {k:'yts',name:'YouTube Shorts',sample:'62000, 48000, 75000, 51000, 58000, 44000'},
+  {k:'tt',name:'TikTok',sample:'95000, 120000, 88000, 1400000, 101000, 76000, 92000'},
+  {k:'ig',name:'Instagram Reels',sample:'41000, 38000, 52000, 36000, 47000, 290000, 44000'},
+  {k:'blog',name:'Blog (monthly page views)',sample:'18000, 21000, 19500'}
+];
+const ITEMS=[
+  {id:'ytDed',name:'YouTube dedicated long form',ch:'yt',w:1,ded:true},
+  {id:'ytInt',name:'YouTube integration',ch:'yt',w:1,ded:false},
+  {id:'ytShort',name:'YouTube Short',ch:'yts',w:1,ded:false},
+  {id:'ttDed',name:'TikTok dedicated',ch:'tt',w:1,ded:true},
+  {id:'ttInt',name:'TikTok integration',ch:'tt',w:1,ded:false},
+  {id:'igDed',name:'IG dedicated Reel',ch:'ig',w:1,ded:true},
+  {id:'igInt',name:'IG integration Reel',ch:'ig',w:1,ded:false},
+  {id:'igStory',name:'IG Story with link + code',ch:'ig',w:0.15,ded:false},
+  {id:'blogArt',name:'Blog article',ch:'blog',w:1,ded:true},
+  {id:'blogLink',name:'Blog link insertion',ch:'blog',w:0.3,ded:false}
+];
+const DEFAULT_QTY={ytDed:1,ytInt:2,ytShort:3,igInt:2,igStory:4};
+const TIERS=[{n:'Nano',max:1e4,eng:6,lead:[25,12]},{n:'Micro',max:1e5,eng:4.5,lead:[22,11]},{n:'Macro',max:5e5,eng:3.2,lead:[18,9]},{n:'Fama',max:1e6,eng:2.4,lead:[14,7]},{n:'Mega',max:Infinity,eng:1.8,lead:[10,5]}];
+const LONGTAIL={Pessimistic:[1,1.1,1.2,1.5],Realistic:[1,1.4,1.9,2.1],Optimistic:[1,2,2.5,2.9]};
+const SEASON={au:[1.3,1.0,0.9,1.1,0.8,0.9,1.0,0.9,1.1,1.2,1.3,1.5],eu:[0.8,0.9,1.1,1.2,1.4,1.5,1.4,1.2,1.0,0.9,0.8,1.0],flat:Array(12).fill(1)};
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmt=(n,d=0)=>isFinite(n)?n.toLocaleString('en-GB',{maximumFractionDigits:d,minimumFractionDigits:d}):'-';
+const eur=n=>'€'+fmt(n,2);
+const num=id=>parseFloat($(id).value)||0;
+const toEur=(v,c)=>v*FX[c];
+
+// tabs
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+});
+
+// currency selects
+['budgetCur','rcCur'].forEach(id=>{$(id).innerHTML=CUR.map(c=>`<option>${c}</option>`).join('')});
+$('rcCur').value='AUD';
+$('months').innerHTML=Array.from({length:12},(_,i)=>`<option ${i===2?'selected':''}>${i+1}</option>`).join('');
+$('fxBox').innerHTML=CUR.filter(c=>c!=='EUR').map(c=>`<label>1 ${c} = EUR</label><input type="number" step="0.01" data-fx="${c}" value="${FX[c]}">`).join('');
+document.querySelectorAll('[data-fx]').forEach(i=>i.oninput=()=>{FX[i.dataset.fx]=parseFloat(i.value)||0;recalc()});
+const d=new Date();$('calStart').value=`${d.getFullYear()}-${String(d.getMonth()+2>12?1:d.getMonth()+2).padStart(2,'0')}`;
+
+// views
+$('viewCards').innerHTML=CHANNELS.map(c=>`<div class="card"><h2>${c.name}</h2>
+<textarea data-ch="${c.k}">${c.sample}</textarea>
+<div style="margin-top:8px">Clean average: <b id="avg_${c.k}">-</b></div>
+<div class="chips" id="chips_${c.k}"></div>
+<details class="work"><summary>Show working</summary><pre id="work_${c.k}"></pre></details></div>`).join('');
+
+function parseViews(t){return t.split(/[\s,;]+/).map(x=>parseFloat(x.replace(/[^\d.]/g,''))).filter(x=>x>0).slice(0,30)}
+function median(a){if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function cleanAvg(vals){
+  const spikeX=num('spikeX'),need=num('millionRule');
+  const last6=vals.slice(0,6),millionCount=last6.filter(v=>v>=1e6).length;
+  const allowMillion=millionCount>=need;
+  const base=vals.filter(v=>allowMillion||v<1e6),med=median(base);
+  const kept=[],dropped=[];
+  vals.forEach(v=>{
+    if(v>=1e6&&!allowMillion)dropped.push([v,'1M+ not consistent']);
+    else if(med&&v>med*spikeX)dropped.push([v,`> ${spikeX}× median`]);
+    else kept.push(v);
+  });
+  const avg=kept.length?kept.reduce((a,b)=>a+b,0)/kept.length:0;
+  return {avg,kept,dropped,med,millionCount,allowMillion};
+}
+const AVG={};
+function calcViews(){
+  CHANNELS.forEach(c=>{
+    const vals=parseViews(document.querySelector(`[data-ch="${c.k}"]`).value);
+    const r=cleanAvg(vals);AVG[c.k]=r.avg;
+    $('avg_'+c.k).textContent=fmt(r.avg)+' views';
+    $('chips_'+c.k).innerHTML=vals.map(v=>`<span class="${r.kept.includes(v)?'':'x'}">${fmt(v)}</span>`).join('');
+    $('work_'+c.k).textContent=`Values entered: ${vals.length}
+1M+ in last 6: ${r.millionCount} (rule needs ${num('millionRule')}) → ${r.allowMillion?'1M+ kept':'1M+ excluded'}
+Median of eligible values: ${fmt(r.med)}
+Excluded: ${r.dropped.length?r.dropped.map(x=>fmt(x[0])+' ('+x[1]+')').join(', '):'none'}
+Average = sum of kept / count = ${fmt(r.kept.reduce((a,b)=>a+b,0))} / ${r.kept.length} = ${fmt(r.avg)}`;
+  });
+}
+
+// package
+$('pkgItems').innerHTML=ITEMS.map(i=>`<div class="row" style="align-items:center"><div style="flex:3;font-size:14px">${i.name}</div><div><input type="number" min="0" data-item="${i.id}" value="${DEFAULT_QTY[i.id]||0}"></div></div>`).join('');
+function pkg(){
+  return ITEMS.map(i=>{const q=parseFloat(document.querySelector(`[data-item="${i.id}"]`).value)||0;const v=(AVG[i.ch]||0)*i.w;return {...i,q,v,tot:v*q}}).filter(i=>i.q>0);
+}
+function calcPackage(){
+  const p=pkg(),views=p.reduce((a,b)=>a+b.tot,0),b=toEur(num('budget'),$('budgetCur').value);
+  const cpm=views?b/views*1000:NaN,ceil=num('ceiling'),good=num('goodCpm');
+  $('cpmOut').innerHTML=isFinite(cpm)?`${eur(cpm)} <small>CPM</small>`:'-';
+  $('cpmBadge').innerHTML=!isFinite(cpm)?'':cpm<=good?'<span class="badge ok">Good deal</span>':cpm<=ceil?'<span class="badge mid">Acceptable, room to negotiate</span>':'<span class="badge no">Above ceiling, counter</span>';
+  $('totViews').textContent=fmt(views);$('budEur').textContent=eur(b);
+  $('maxBud').textContent=eur(views*ceil/1000);$('needViews').textContent=fmt(b/ceil*1000);
+  $('cpmWork').textContent=p.map(i=>`${i.name}: ${i.q} × ${fmt(i.v)} views${i.w!==1?` (avg × ${i.w} reach factor)`:''} = ${fmt(i.tot)}`).join('\n')+
+  `\n\nTotal views = ${fmt(views)}\nBudget = ${fmt(num('budget'),2)} ${$('budgetCur').value} × ${FX[$('budgetCur').value]} = ${eur(b)}\nCPM = budget / views × 1000 = ${eur(cpm)}\nCeiling ${eur(ceil)} → max budget = views × ${ceil} / 1000`;
+  return {p,views,b,cpm};
+}
+$('solveBtn').onclick=()=>{
+  const V=parseFloat($('sV').value),C=parseFloat($('sC').value),B=parseFloat($('sB').value);
+  let out;
+  if(isNaN(V)&&C&&B)out=`Total views needed: <b>${fmt(B/C*1000)}</b>`;
+  else if(isNaN(C)&&V&&B)out=`CPM: <b>${eur(B/V*1000)}</b>`;
+  else if(isNaN(B)&&V&&C)out=`Budget: <b>${eur(V*C/1000)}</b>`;
+  else out='Fill exactly two fields.';
+  $('solveOut').innerHTML=out;
+};
+
+// reverse rate card
+function matchChannel(name){
+  const n=name.toLowerCase();
+  if(n.includes('short'))return['yts',1];
+  if(n.includes('youtube')||n.includes('yt'))return['yt',1];
+  if(n.includes('tiktok'))return['tt',1];
+  if(n.includes('story'))return['ig',0.15];
+  if(n.includes('reel')||n.includes('instagram'))return['ig',1];
+  if(n.includes('blog'))return['blog',1];
+  return[null,0];
+}
+function calcReverse(){
+  const cur=$('rcCur').value,tgt=num('rcTarget'),ceil=num('ceiling'),work=[];
+  const rows=$('rateCard').value.split('\n').map(l=>l.split(';')).filter(x=>x.length>=2).map(([n,p])=>{
+    const price=parseFloat(p.replace(/[^\d.]/g,''))||0,[ch,w]=matchChannel(n),views=(AVG[ch]||0)*w,pe=toEur(price,cur);
+    const cpm=views?pe/views*1000:NaN,counter=views*tgt/1000/FX[cur];
+    work.push(`${n.trim()}: ${fmt(price)} ${cur} = ${eur(pe)} / ${fmt(views)} views × 1000 = ${eur(cpm)}`);
+    return {n:n.trim(),price,cpm,counter,ch};
+  });
+  $('rcTable').innerHTML=`<tr><th>Item</th><th class="n">Price</th><th class="n">CPM</th><th>Verdict</th><th class="n">Counter at target</th></tr>`+
+  rows.map(r=>`<tr><td>${r.n}</td><td class="n">${fmt(r.price)} ${cur}</td><td class="n">${r.ch?eur(r.cpm):'?'}</td>
+  <td>${!r.ch?'<span class="badge mid">Unknown type</span>':r.cpm<=tgt?'<span class="badge ok">Accept</span>':r.cpm<=ceil?'<span class="badge mid">Negotiate</span>':'<span class="badge no">Counter</span>'}</td>
+  <td class="n">${r.ch&&r.cpm>tgt?fmt(r.counter)+' '+cur:'-'}</td></tr>`).join('');
+  $('rcWork').textContent=work.join('\n')+`\n\nCounter price = views × target CPM / 1000, converted back to ${cur}`;
+}
+$('rcBtn').onclick=calcReverse;
+
+// ROI
+function tierOf(f){return TIERS.find(t=>f<t.max)}
+function calcROI(pk){
+  const t=tierOf(num('followers')),ded=$('fStyle').value==='ded';
+  $('tierOut').textContent=`${t.n} tier · engagement ${t.eng}% · click rate ${t.lead[ded?0:1]}% of engaged`;
+  const reach=pk.views,engaged=reach*t.eng/100,arrivals=engaged*(1-num('fDrop')/100),leads=arrivals*t.lead[ded?0:1]/100;
+  const sales=leads*num('fSale')/100,rev=sales*num('fAov'),comm=rev*num('fComm')/100;
+  const H=[1,3,6,12];
+  let html=`<tr><th>Scenario</th>${H.map(h=>`<th class="n">${h} mo revenue</th>`).join('')}<th class="n">12 mo ROAS</th><th class="n">12 mo ROI</th></tr>`;
+  Object.entries(LONGTAIL).forEach(([k,m])=>{
+    const r12=rev*m[3],c12=pk.b+r12*num('fComm')/100;
+    html+=`<tr><td>${k}</td>${m.map(x=>`<td class="n">${eur(rev*x)}</td>`).join('')}<td class="n"><b>${fmt(r12/pk.b,2)}x</b></td><td class="n">${fmt((r12-c12)/c12*100,0)}%</td></tr>`;
+  });
+  $('roiTable').innerHTML=html;
+  $('roiWork').textContent=`Reach (package views) = ${fmt(reach)}
+Engaged = reach × ${t.eng}% = ${fmt(engaged)}
+After website drop-off ${num('fDrop')}% = ${fmt(arrivals)}
+Leads (site visitors) = arrivals × ${t.lead[ded?0:1]}% click rate = ${fmt(leads)}
+Sales = leads × ${num('fSale')}% = ${fmt(sales,1)}
+Revenue month 1 = sales × AOV ${eur(num('fAov'))} = ${eur(rev)}
+Commission = revenue × ${num('fComm')}% = ${eur(comm)}
+ROAS = revenue / budget · ROI = (revenue - budget - commission) / (budget + commission)
+Long-tail multipliers at 1/3/6/12 months applied per scenario.`;
+}
+
+// calendar
+function calcCalendar(pk){
+  const n=parseInt($('months').value),[y,m]=$('calStart').value.split('-').map(Number),w=SEASON[$('calSeason').value];
+  const items=[];pk.p.forEach(i=>{for(let k=0;k<i.q;k++)items.push(i.name)});
+  const months=Array.from({length:n},(_,i)=>{const mi=(m-1+i)%12,yy=y+Math.floor((m-1+i)/12);return{mi,yy,w:w[mi],items:[]}});
+  // min one per month, rest by weight
+  let pool=[...items];
+  months.forEach(mo=>{if(pool.length)mo.items.push(pool.shift())});
+  while(pool.length){
+    const best=months.reduce((a,b)=>(b.w/(b.items.length+1))>(a.w/(a.items.length+1))?b:a);
+    best.items.push(pool.shift());
+  }
+  window._cal=months;
+  $('calTable').innerHTML=`<tr><th>Month</th><th>Season weight</th><th>Content</th></tr>`+months.map(mo=>`<tr><td>${MONTHS[mo.mi]} ${mo.yy}</td><td>${mo.w}</td><td>${mo.items.join('<br>')||'<span style="color:var(--bad)">Package too small for one item per month</span>'}</td></tr>`).join('');
+}
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click()}
+$('calCsv').onclick=()=>download('content-calendar.csv','Month,Content\n'+_cal.flatMap(mo=>mo.items.map(i=>`${MONTHS[mo.mi]} ${mo.yy},"${i}"`)).join('\n'),'text/csv');
+$('calIcs').onclick=()=>{
+  const ev=_cal.flatMap(mo=>mo.items.map((it,k)=>{const day=String(Math.min(5+k*7,28)).padStart(2,'0');const dt=`${mo.yy}${String(mo.mi+1).padStart(2,'0')}${day}`;
+  return `BEGIN:VEVENT\nUID:${dt}-${k}-${Math.random().toString(36).slice(2)}@dealdesk\nDTSTART;VALUE=DATE:${dt}\nSUMMARY:${$('creator').value}: ${it}\nEND:VEVENT`}));
+  download('content-calendar.ics',`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Creator Deal Desk//EN\n${ev.join('\n')}\nEND:VCALENDAR`,'text/calendar');
+};
+
+// log
+let LOG=[];try{LOG=JSON.parse(localStorage.getItem('dealdesk_log')||'[]')}catch(e){}
+function saveLog(){try{localStorage.setItem('dealdesk_log',JSON.stringify(LOG))}catch(e){}}
+function drawLog(){
+  $('logTable').innerHTML=`<tr><th>Date</th><th>Creator</th><th class="n">CPM</th><th>Outcome</th><th>Note</th></tr>`+
+  (LOG.length?LOG.map(l=>`<tr><td>${l.date}</td><td>${l.creator}</td><td class="n">${l.cpm}</td><td>${l.outcome}</td><td>${l.note}</td></tr>`).join(''):'<tr><td colspan="5" style="color:var(--muted)">No leads logged yet.</td></tr>');
+}
+const esc=s=>s.replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+$('logAdd').onclick=()=>{const r=calcPackage();LOG.unshift({date:new Date().toISOString().slice(0,10),creator:esc($('creator').value),cpm:eur(r.cpm),outcome:$('logOutcome').value,note:esc($('logNote').value)});saveLog();drawLog();$('logNote').value=''};
+$('logCsv').onclick=()=>download('lead-log.csv','Date,Creator,CPM,Outcome,Note\n'+LOG.map(l=>[l.date,l.creator,l.cpm,l.outcome,l.note].map(x=>`"${x}"`).join(',')).join('\n'),'text/csv');
+
+function recalc(){calcViews();const pk=calcPackage();calcROI(pk);calcCalendar(pk);calcReverse()}
+document.addEventListener('input',e=>{if(e.target.closest('#log')||e.target.id==='rateCard'||e.target.closest('#package .card:nth-child(3)'))return;recalc()});
+document.addEventListener('change',e=>{if(e.target.tagName==='SELECT')recalc()});
+recalc();drawLog();
+</script>
+</body>
+</html>
